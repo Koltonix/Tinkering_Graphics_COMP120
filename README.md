@@ -1,2 +1,2 @@
-# Tinkering_Graphics_COMP120
-Repository for the COMP120 Tinkering Graphics Submission
+# comp120-tinkering-graphics
+Python Code for Re-purposing Graphics Algorithms
