@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 
+# Designates the colour to be used
 green = (40, 255, 30)
 brown = (40, 60, 90)
 red = (155, 20, 30)
@@ -24,6 +25,7 @@ colours = {
     water: waterBlue
 }
 
+# Tells the program what each tile should be
 tilemap = [
     [sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky],
     [sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky, sky],
@@ -56,10 +58,11 @@ is_running = True
 while is_running:
     for event in pygame.event.get():
         if event.type == QUIT:
-            pygame.quit()
+            pygame.QUIT()
             sys.exit()
         pygame.event.post(event)
 
+# Draws each tile based on the size of the tilemap
     for row in range(mapHeight):
         for column in range(mapWidth):
             pygame.draw.rect(screen, colours[tilemap[row][column]],
