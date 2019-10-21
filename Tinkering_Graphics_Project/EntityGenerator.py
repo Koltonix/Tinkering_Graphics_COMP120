@@ -3,6 +3,10 @@ import os
 import pygame
 import random
 
+""" What his Program Does - AMEND LATER """
+__author___ = "Christopher Philip Robertson"
+__copyright___ = "MIT License Copyright (c) 2019"
+
 FPS_CLOCK = pygame.time.Clock()
 FPS = 30
 
@@ -28,10 +32,11 @@ buttons_to_render = []
 
 
 def main():
-    global main_screen, image_screen
+    global main_screen, image_screen, selected_colour, shapes_to_render
 
     pygame.init()
 
+    selected_colour = WHITE
     basic_font = pygame.font.Font("freesansbold.ttf", BASIC_FONT_SIZE)
 
     main_screen = (pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)))
@@ -45,6 +50,7 @@ def main():
 
     while is_running:
         main_screen.fill(BACKGROUND_COLOUR)
+        image_screen.fill(BACKGROUND_COLOUR)
         check_for_quit()
 
         draw_shapes(shapes_to_render)
@@ -55,6 +61,7 @@ def main():
             cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
             save_image(cropped_surface, "saved_image.png", os.getcwd())
 
+        move_current_shape(shapes_to_render)
         check_button_press(buttons_to_render)
 
         FPS_CLOCK.tick(FPS)
@@ -79,7 +86,10 @@ def set_buttons(font):
     save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, (75, 100))
     buttons_to_render.append((save_button[0], save_button[1], "SAVE"))
 
-    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 125))
+    delete_button = generate_text(font, "Delete", FONT_COLOUR, BUTTON_COLOUR, (75, 125))
+    buttons_to_render.append((delete_button[0], delete_button[1], "DELETE"))
+
+    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 150))
     buttons_to_render.append((circle_button[0], circle_button[1], "CIRCLE"))
 
 
@@ -94,19 +104,8 @@ def draw_buttons(buttons=[]):
         main_screen.blit(buttons[i][0], buttons[i][1])
 
 
-def check_button_press(buttons=[]):
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
-            for i in range(0, len(buttons)):
-                if buttons[i][1].collidepoint(pygame.mouse.get_pos()):
-                    if buttons[i][2] == "SAVE":
-                        cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
-                        save_image(cropped_surface, "saved_image.png", os.getcwd())
-
-
 def save_image(image, file_name="", path=os.path):
-    # Saves and image to the directory path of
-    # the project in a sub folder of Images
+    """Saves the image to the directory path of the project in a sub folder of Images"""
     pygame.image.save(image, str(path) + "\\Images\\" + file_name)
     print("Image has saved as: " + file_name)
 
@@ -175,6 +174,56 @@ def get_input():
         pygame.event.post(event)
 
     return False
+
+
+def check_button_press(buttons=[]):
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONUP:
+            for i in range(0, len(buttons)):
+                if buttons[i][1].collidepoint(pygame.mouse.get_pos()):
+                    trigger_button_events(buttons[i][2])
+
+
+def move_current_shape(shapes=[]):
+    if len(shapes) > 0:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] - 5
+
+                elif event.key == pygame.K_s:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] + 5
+
+                elif event.key == pygame.K_a:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0] - 5, shape_pos[1]
+
+                elif event.key == pygame.K_d:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0] + 5, shape_pos[1]
+
+            pygame.event.post(event)
+
+
+def trigger_button_events(event=""):
+    if event == "SAVE":
+        cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
+        save_image(cropped_surface, "saved_image.png", os.getcwd())
+
+    if event == "DELETE":
+        if len(shapes_to_render) > 0:
+            shape_to_delete = shapes_to_render[len(shapes_to_render) - 1]
+            shapes_to_render.remove(shape_to_delete)
+
+    elif event == "CIRCLE":
+        circle = Circle(SCREEN_CENTRE, GREEN, 30)
+        shapes_to_render.append(circle)
+
+    elif event == "SQUARE":
+        square = Rectangle(SCREEN_CENTRE, selected_colour, pygame.Rect(0, 0, 50, 50))
+        shapes_to_render.append(square)
 
 
 def check_for_quit():
