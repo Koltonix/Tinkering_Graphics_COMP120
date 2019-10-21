@@ -3,6 +3,10 @@ import os
 import pygame
 import random
 
+""" What his Program Does - AMEND LATER """
+__author___ = "Christopher Philip Robertson"
+__copyright___ = "MIT License Copyright (c) 2019"
+
 FPS_CLOCK = pygame.time.Clock()
 FPS = 30
 
@@ -17,31 +21,48 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+BUTTON_COLOUR = WHITE
+FONT_COLOUR = BLACK
 BACKGROUND_COLOUR = BLACK
 
+BASIC_FONT_SIZE = 20
+
 shapes_to_render = []
+buttons_to_render = []
 
 
 def main():
+    global main_screen, image_screen, selected_colour, shapes_to_render
+
     pygame.init()
 
+    selected_colour = WHITE
+    basic_font = pygame.font.Font("freesansbold.ttf", BASIC_FONT_SIZE)
+
     main_screen = (pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)))
+    image_screen = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption(PROGRAM_CAPTION)
 
     set_shapes()
+    set_buttons(basic_font)
 
     is_running = True
 
     while is_running:
         main_screen.fill(BACKGROUND_COLOUR)
+        image_screen.fill(BACKGROUND_COLOUR)
         check_for_quit()
 
-        draw_shapes(main_screen, shapes_to_render)
+        draw_shapes(shapes_to_render)
+        draw_buttons(buttons_to_render)
 
         if get_input():
             # image = pygame.image.load(str(os.getcwd()) + "\\Images\\" + "Cactus.png")
-            cropped_surface = crop_image(main_screen, BACKGROUND_COLOUR)
+            cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
             save_image(cropped_surface, "saved_image.png", os.getcwd())
+
+        move_current_shape(shapes_to_render)
+        check_button_press(buttons_to_render)
 
         FPS_CLOCK.tick(FPS)
         pygame.display.update()
@@ -61,20 +82,36 @@ def set_shapes():
     shapes_to_render.append(triangle)
 
 
-def draw_shapes(main_display, shapes):
+def set_buttons(font):
+    save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, (75, 100))
+    buttons_to_render.append((save_button[0], save_button[1], "SAVE"))
+
+    delete_button = generate_text(font, "Delete", FONT_COLOUR, BUTTON_COLOUR, (75, 125))
+    buttons_to_render.append((delete_button[0], delete_button[1], "DELETE"))
+
+    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 150))
+    buttons_to_render.append((circle_button[0], circle_button[1], "CIRCLE"))
+
+
+def draw_shapes(shapes):
     for i in range(0, len(shapes)):
-        shapes[i].draw_shape(main_display)
+        shapes[i].draw_shape()
+        main_screen.blit(image_screen, (0, 0))
+
+
+def draw_buttons(buttons=[]):
+    for i in range(0, len(buttons)):
+        main_screen.blit(buttons[i][0], buttons[i][1])
 
 
 def save_image(image, file_name="", path=os.path):
-    # Saves and image to the directory path of
-    # the project in a sub folder of Images
+    """Saves the image to the directory path of the project in a sub folder of Images"""
     pygame.image.save(image, str(path) + "\\Images\\" + file_name)
     print("Image has saved as: " + file_name)
 
 
 def crop_image(image, background_colour=(0, 0, 0)):
-    """ Returns a cropped display surface """
+    """Returns a cropped display surface"""
     # Getting the largest coordinate that it can be to scale down
     smallest_used_coordinate = image.get_size()
     largest_used_coordinate = (0, 0)
@@ -110,7 +147,7 @@ def crop_image(image, background_colour=(0, 0, 0)):
 
 
 def get_random_colour():
-    """ Returns a random colour from the entire colour spectrum """
+    """Returns a random colour from the entire colour spectrum"""
     colour = [0, 0, 0]
     for i in range(0, 2):
         colour[i] = random.randint(0, 255)
@@ -118,8 +155,18 @@ def get_random_colour():
     return tuple(colour)
 
 
+def generate_text(font, text, colour, bg_colour, centre_point):
+    """Returns the Rect and Surface of a text """
+    text_display = font.render(text, True, colour, bg_colour)
+
+    text_rect = text_display.get_rect()
+    text_rect.center = centre_point
+
+    return text_display, text_rect
+
+
 def get_input():
-    """ Returns a boolean to state if any button has been pressed """
+    """Returns a boolean to state if any button has been pressed"""
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
@@ -127,6 +174,56 @@ def get_input():
         pygame.event.post(event)
 
     return False
+
+
+def check_button_press(buttons=[]):
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONUP:
+            for i in range(0, len(buttons)):
+                if buttons[i][1].collidepoint(pygame.mouse.get_pos()):
+                    trigger_button_events(buttons[i][2])
+
+
+def move_current_shape(shapes=[]):
+    if len(shapes) > 0:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] - 5
+
+                elif event.key == pygame.K_s:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] + 5
+
+                elif event.key == pygame.K_a:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0] - 5, shape_pos[1]
+
+                elif event.key == pygame.K_d:
+                    shape_pos = shapes[len(shapes) - 1].position
+                    shapes[len(shapes) - 1].position = shape_pos[0] + 5, shape_pos[1]
+
+            pygame.event.post(event)
+
+
+def trigger_button_events(event=""):
+    if event == "SAVE":
+        cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
+        save_image(cropped_surface, "saved_image.png", os.getcwd())
+
+    if event == "DELETE":
+        if len(shapes_to_render) > 0:
+            shape_to_delete = shapes_to_render[len(shapes_to_render) - 1]
+            shapes_to_render.remove(shape_to_delete)
+
+    elif event == "CIRCLE":
+        circle = Circle(SCREEN_CENTRE, GREEN, 30)
+        shapes_to_render.append(circle)
+
+    elif event == "SQUARE":
+        square = Rectangle(SCREEN_CENTRE, selected_colour, pygame.Rect(0, 0, 50, 50))
+        shapes_to_render.append(square)
 
 
 def check_for_quit():
@@ -151,7 +248,7 @@ class Shape:
         self.position = position
         self.colour = colour
 
-    def draw_shape(self, main_screen=pygame.Surface):
+    def draw_shape(self):
         """
         A separate function that is being declared, so that it may be used by
         the child classes, but is not being used here since Shape is generic
@@ -174,9 +271,9 @@ class Rectangle(Shape):
         bounds.center = (position[0], position[1])
         self.bounds = bounds
 
-    def draw_shape(self, main_screen=pygame.Surface):
-        super(Rectangle, self).draw_shape(main_screen)
-        pygame.draw.rect(main_screen, self.colour, self.bounds)
+    def draw_shape(self):
+        super(Rectangle, self).draw_shape()
+        pygame.draw.rect(image_screen, self.colour, self.bounds)
 
 
 class Circle(Shape):
@@ -184,9 +281,9 @@ class Circle(Shape):
         super(Circle, self).__init__(position, colour)
         self.radius = radius
 
-    def draw_shape(self, main_screen=pygame.Surface):
-        super(Circle, self).draw_shape(main_screen)
-        pygame.draw.circle(main_screen, self.colour, (int(self.position[0]), int(self.position[1])), self.radius)
+    def draw_shape(self):
+        super(Circle, self).draw_shape()
+        pygame.draw.circle(image_screen, self.colour, (int(self.position[0]), int(self.position[1])), self.radius)
 
 
 class Polygon(Shape):
@@ -195,9 +292,9 @@ class Polygon(Shape):
         super(Polygon, self).__init__(position, colour)
         self.bounds = bounds
 
-    def draw_shape(self, main_screen=pygame.Surface):
-        super(Polygon, self).draw_shape(main_screen)
-        pygame.draw.polygon(main_screen, self.colour, self.bounds)
+    def draw_shape(self):
+        super(Polygon, self).draw_shape()
+        pygame.draw.polygon(image_screen, self.colour, self.bounds)
 
 
 if __name__ == '__main__':
