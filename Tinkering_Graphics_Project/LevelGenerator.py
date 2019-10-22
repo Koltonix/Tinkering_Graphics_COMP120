@@ -100,5 +100,4 @@ while is_running:
             pygame.quit()
         pygame.event.post(event)
 
-
     pygame.display.update()
