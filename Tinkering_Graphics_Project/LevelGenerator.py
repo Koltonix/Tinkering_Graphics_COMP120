@@ -5,6 +5,14 @@ import sys
 from pygame.locals import *
 import random
 
+
+def drawtiles():
+    for row in range(mapHeight):
+        for column in range(mapWidth):
+            pygame.draw.rect(screen, colours[tilemap[row][column]],
+                             (column * tilesize, row * tilesize, tilesize, tilesize))
+
+
 # Designates the colour to be used
 green = (40, 255, 30)
 brown = (139, 69, 19)
@@ -84,16 +92,14 @@ screen = pygame.display.set_mode((mapWidth * tilesize, mapHeight * tilesize))
 
 is_running = True
 
+# cant get the code to exit properly
 while is_running:
     for event in pygame.event.get():
         if event.type == QUIT:
             is_running = False
             pygame.quit()
         pygame.event.post(event)
-
+    drawtiles()
     # Draws each tile based on the size of the tilemap
-    for row in range(mapHeight):
-        for column in range(mapWidth):
-            pygame.draw.rect(screen, colours[tilemap[row][column]],
-                             (column * tilesize, row * tilesize, tilesize, tilesize))
+
     pygame.display.update()
