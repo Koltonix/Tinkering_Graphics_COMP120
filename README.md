@@ -15,5 +15,5 @@ Contract #3 - Platformer Entity Generator:
 Contract #4 - Platformer Entity Reskinning:
 
 
-Contract #5 - Colour Blindness User Interface Analysis Tool:
+Contract #5 - Colour Blindness User Interface Analysis Tool:\
 Thomas O'Leary
