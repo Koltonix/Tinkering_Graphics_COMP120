@@ -13,7 +13,6 @@ TILE_HEIGHT = 20
 TILE_WIDTH = 20
 tile_colour = 255, 255, 255
 
-
 def main():
     pygame.init()
 
@@ -39,19 +38,19 @@ def draw_tile(main_window):
 
 # Checks for User Input for which Tile to Generate. Struggling to get it to output.
 def check_for_input():
-
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
+                print('hello')
 
         pygame.event.post(event)
-
 
 
 def check_for_quit():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_program()
+        pygame.event.post(event)
 
 
 def quit_program():
