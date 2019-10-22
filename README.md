@@ -12,7 +12,9 @@
 |[Thomas O'Leary](https://github.com/thomasoleary)    | #5       |
 
 ## Contracts Information
-**Python Version 3 is necessary for all projects**
+**Python Version 3 is necessary for all projects** 
+
+**You will also need the Pygame module too**
 
 ### Contract #1 - Platformer Tile Generator
 *A tool that will generate textures for various different types of tile that couldbe conceivable to have in a platformer.  There needs to be an allowanceto specify variations through a set of attiributes (e.g., soil-dry, wet,charred;foliage-spring,autumn,summer,winter; etc.)*
@@ -50,4 +52,6 @@
 ### Contract #5  - Colour Blindness User InterfaceTool
 *1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone witha form of colour blindess. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
 
-#### **Python Version 3 is necessary for all project**
+# MIT Licensing
+
+We have decided to go with the MIT License since we are more than pleased for people to use our code in a commercial sense for their own software. We also acknowledge and allow the distribution and modification of our code to be used elsewhere whether it be public, or private. The conditions to this is that this piece of code provides no warranty, nor limitation of liability. The largest condition is that if our code is used then the MIT License provided must be included in said project and state our authorship into it. The reason we quite like this is because it could potentially help the open source community for free while still allowing us to retain our authorship of the code which could be to our benefit in gaining some advertisement in the software development industry.
