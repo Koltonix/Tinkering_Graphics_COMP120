@@ -1,11 +1,11 @@
 # Developed by Callum Metcalfe
 
 import pygame
-import sys
 from pygame.locals import *
 import random
 
 
+# Draws each tile based on the size of the tilemap
 def drawtiles():
     for row in range(mapHeight):
         for column in range(mapWidth):
@@ -92,14 +92,12 @@ screen = pygame.display.set_mode((mapWidth * tilesize, mapHeight * tilesize))
 
 is_running = True
 
-# cant get the code to exit properly
 while is_running:
+    drawtiles()
+
     for event in pygame.event.get():
         if event.type == QUIT:
-            is_running = False
             pygame.quit()
         pygame.event.post(event)
-    drawtiles()
-    # Draws each tile based on the size of the tilemap
 
     pygame.display.update()
