@@ -32,7 +32,7 @@
 ### Contract #3 - Platformer Entity Generator
 *Various creatures will occupy the world, and so the ability to create manydifferent types of items and enemies using various components is desired.These units should be saved to a new png file for use in the game.*
 
-#### Reqirements
+#### Requirements
 
 * Must be able to create a variety of objects
 * Using a component system if possible
@@ -59,7 +59,7 @@
 ### Contract #5  - Colour Blindness User InterfaceTool
 *1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone with a form of colour blindness. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
 
-#### Reqirements
+#### Requirements
 
 * Grab an image to be processed and reformatted
 * Display the processed image to the screen
