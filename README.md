@@ -22,10 +22,17 @@
 ### Contract #2 - Platformer Level Generator
 *A tool that will take a level size and other attributues and generate a tile mapto represent a 2d side-scrolling platformer.  A tile set will be fed into this tooland it is imagined that any or all of these tiles could be used to generate themap. There should be clearly identifiable features of the level such as pitfalls,shrines, wells, water, pools, and so on; befitting of a historical-fantasy setting.*
 
+#### Requirements
+
+* Generate a tilemap
+* include a water tile
+* Include death tiles
+* Have the map be randomly generated
+
 ### Contract #3 - Platformer Entity Generator
 *Various creatures will occupy the world, and so the ability to create manydifferent types of items and enemies using various components is desired.These units should be saved to a new png file for use in the game.*
 
-#### Reqirements
+#### Requirements
 
 * Must be able to create a variety of objects
 * Using a component system if possible
@@ -50,7 +57,18 @@
 *To enable better re-use of assets,  a tool which reskins in-game items andmonsters devised by the dugeon entity.  You will have to remove a colourand then add a new colours.  There are four types (representing qualities)represented by a set of colours.  For example:  red, green, blue and yellow.Each unit of these teams will have to be saved in a new png file.*
 
 ### Contract #5  - Colour Blindness User InterfaceTool
-*1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone witha form of colour blindess. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
+*1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone with a form of colour blindness. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
+
+#### Requirements
+
+* Grab an image to be processed and reformatted
+* Display the processed image to the screen
+* Must be able to save multiple processed images
+
+#### Instructions
+**Before Running:**
+
+* To run the script, ensure that within the root folder a folder named '\Colour Blind Images' is there. This will be the folder where all newly processed images will be saved to.
 
 # MIT Licensing
 
