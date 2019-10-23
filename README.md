@@ -22,6 +22,13 @@
 ### Contract #2 - Platformer Level Generator
 *A tool that will take a level size and other attributues and generate a tile mapto represent a 2d side-scrolling platformer.  A tile set will be fed into this tooland it is imagined that any or all of these tiles could be used to generate themap. There should be clearly identifiable features of the level such as pitfalls,shrines, wells, water, pools, and so on; befitting of a historical-fantasy setting.*
 
+#### Requirements
+
+* Generate a tilemap
+* include a water tile
+* Include death tiles
+* Have the map be randomly generated
+
 ### Contract #3 - Platformer Entity Generator
 *Various creatures will occupy the world, and so the ability to create manydifferent types of items and enemies using various components is desired.These units should be saved to a new png file for use in the game.*
 
