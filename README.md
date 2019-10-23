@@ -50,7 +50,18 @@
 *To enable better re-use of assets,  a tool which reskins in-game items andmonsters devised by the dugeon entity.  You will have to remove a colourand then add a new colours.  There are four types (representing qualities)represented by a set of colours.  For example:  red, green, blue and yellow.Each unit of these teams will have to be saved in a new png file.*
 
 ### Contract #5  - Colour Blindness User InterfaceTool
-*1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone witha form of colour blindess. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
+*1-in-12 men and 1-in-200 women in the world suffer some form of colour blind-ness. Your studio lead has asked you to create a tool which takes in a screen-shot of your game and then displays the image as if viewed by someone with a form of colour blindness. They would like you to save an image to file for everytype of colour blindess so that the UI designer can adjust the colours of the ingame UI.*
+
+#### Reqirements
+
+* Grab an image to be processed and reformatted
+* Display the processed image to the screen
+* Must be able to save multiple processed images
+
+#### Instructions
+**Before Running:**
+
+* To run the script, ensure that within the root folder a folder named '\Colour Blind Images' is there. This will be the folder where all newly processed images will be saved to.
 
 # MIT Licensing
 
