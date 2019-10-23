@@ -5,7 +5,7 @@
 
 | Name                                                | Contract |
 |-----------------------------------------------------|----------|
-|[James Heathage](https://github.com/Heathage)        | #1       |
+|[James Heath](https://github.com/Heathage)           | #1       |
 |[Callum Metcalfe](https://github.com/Tragicdragoon)  | #2       |
 |[Christopher Robertson](https://github.com/Koltonix) | #3       |
 |[Alex Williamson](https://github.com/Alphon1)        | #4       |
