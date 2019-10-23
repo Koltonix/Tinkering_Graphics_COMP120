@@ -42,10 +42,12 @@ buttons_to_render = []
 MOVE_SPEED = 5
 SCALE_SPEED = 5
 
-is_colour_button_selected = False
 main_screen = pygame.Surface
 image_screen = pygame.Surface
 selected_colour = (0, 0, 255)
+player_colour_input = []
+
+selected_colour_button = False, "NONE"
 
 
 def main():
@@ -53,7 +55,7 @@ def main():
     The primary function which includes the
     initialisation and game loop of the tool itself.
     """
-    global main_screen, image_screen, shapes_to_render, is_colour_button_selected
+    global main_screen, image_screen, shapes_to_render, selected_colour_button, player_colour_input
     pygame.init()
 
     basic_font = pygame.font.Font("freesansbold.ttf", BASIC_FONT_SIZE)
@@ -73,7 +75,11 @@ def main():
         check_for_quit()
 
         draw_shapes(shapes_to_render)
-        draw_buttons(buttons_to_render)
+        draw_buttons(buttons_to_render, basic_font)
+
+        # If the current rgb button can be changed
+        if selected_colour_button[0]:
+            set_colour(selected_colour_button[1])
 
         if get_input():
             cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
@@ -132,10 +138,31 @@ def draw_shapes(shapes):
         main_screen.blit(image_screen, (0, 0))
 
 
-def draw_buttons(buttons=[]):
+def draw_buttons(buttons=[], font=pygame.font):
     """Renders the buttons to the main display surface"""
     for i in range(0, len(buttons)):
+        # Unfortunately, due to how I went about the buttons I must refresh each colour one manually here
+        # If I had time I would have liked to refactor it, but unfortunately I do not
+        if buttons[i][2] == "RED":
+            r_colour_button = generate_text(font, " " + str(selected_colour[0]) + " ", FONT_COLOUR, BUTTON_COLOUR,
+                                            (565, 100))
+            buttons[i] = (r_colour_button[0], r_colour_button[1], "RED")
+
+        elif buttons[i][2] == "GREEN":
+            g_colour_button = generate_text(font, " " + str(selected_colour[1]) + " ", FONT_COLOUR, BUTTON_COLOUR,
+                                            (565, 125))
+            buttons[i] = (g_colour_button[0], g_colour_button[1], "GREEN")
+
+        elif buttons[i][2] == "BLUE":
+            b_colour_button = generate_text(font, " " + str(selected_colour[2]) + " ", FONT_COLOUR, BUTTON_COLOUR,
+                                            (565, 150))
+            buttons[i] = (b_colour_button[0], b_colour_button[1], "BLUE")
+
         main_screen.blit(buttons[i][0], buttons[i][1])
+
+    colour_preview_rect = pygame.Rect(0, 0, 50, 15)
+    colour_preview_rect.center = (565, 175)
+    colour_preview = pygame.draw.rect(main_screen, selected_colour, colour_preview_rect)
 
 
 def save_image(image, file_name="", path=os.path):
@@ -222,11 +249,13 @@ def check_button_press(buttons=[]):
             for i in range(0, len(buttons)):
                 if buttons[i][1].collidepoint(pygame.mouse.get_pos()):
                     trigger_button_events(buttons[i][2])
-                    continue
+                    return
 
-                elif i == len(buttons) - 1:
-                    global is_colour_button_selected
-                    is_colour_button_selected = False
+                else:
+                    global selected_colour_button
+                    selected_colour_button = False, "NONE"
+
+                    reset_player_colour_input()
 
 
 def move_current_shape(shapes=[]):
@@ -282,9 +311,72 @@ def trigger_button_events(event=""):
     elif event == "DECREASE":
         shapes_to_render[len(shapes_to_render) - 1].set_size(-SCALE_SPEED)
 
-    elif event == "RED" or event == "GREEN" or event == "BLUE":
-        global is_colour_button_selected
-        is_colour_button_selected = True
+    elif event == "RED":
+        set_selected_colour_button(True, "RED")
+
+    elif event == "GREEN":
+        set_selected_colour_button(True, "GREEN")
+
+    elif event == "BLUE":
+        set_selected_colour_button(True, "BLUE")
+
+
+def set_selected_colour_button(is_true=True, colour="BLACK"):
+    """Used to access the selected_colour_button variable using multiple values"""
+
+    reset_player_colour_input()
+
+    global selected_colour_button
+    selected_colour_button = is_true, colour
+
+
+def reset_player_colour_input():
+    global player_colour_input
+    if len(player_colour_input) > 0:
+        for i in range(len(player_colour_input)):
+            player_colour_input.remove(player_colour_input[0])
+
+
+def set_colour(rgb_name):
+    """
+    A function to set either the R, G, or B value of the next shape
+    ASCII Conversion: https://stackoverflow.com/questions/3673428/convert-int-to-ascii-and-back-in-python
+    Checking int against string type: https://tdhopper.com/blog/testing-whether-a-python-string-contains-an-integer/
+    """
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            current_letter = chr(event.key)
+            if str.isdigit(current_letter):
+                current_letter = int(current_letter)
+                if len(player_colour_input) < 3:
+                    player_colour_input.append(current_letter)
+
+                    if len(player_colour_input) == 3:
+                        colour_value = int(str(player_colour_input[0]) +
+                                           str(player_colour_input[1]) +
+                                           str(player_colour_input[2]))
+
+                        if colour_value < 0 or colour_value > 255:
+                            reset_player_colour_input()
+                            return
+
+                        assign_colour(rgb_name, colour_value)
+
+        pygame.event.post(event)
+
+
+def assign_colour(rgb_name, colour_value):
+    """"Uses a colour name and the value to assign to the current selected colour of the player"""
+    global selected_colour
+    if rgb_name == "RED":
+        selected_colour = colour_value, selected_colour[1], selected_colour[2]
+
+    elif rgb_name == "GREEN":
+        selected_colour = selected_colour[0], colour_value, selected_colour[2]
+
+    elif rgb_name == "BLUE":
+        selected_colour = selected_colour[0], selected_colour[1], colour_value
 
 
 def check_for_quit():
