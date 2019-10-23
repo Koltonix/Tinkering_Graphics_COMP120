@@ -49,6 +49,8 @@
 
 * Create objects using the buttons and move around with WASD. 
 
+* You can colour them by clicking on the RGB values on the right hand side. To enter a value you must 3 digits exactly, so the value of 3 would have to be 003
+
 * You are also able to delete the most recent shape that was created too. 
 
 * After you can then save the image which can be found in the '\Images' folder in the root of the program.
