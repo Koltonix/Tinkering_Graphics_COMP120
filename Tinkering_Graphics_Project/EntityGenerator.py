@@ -30,6 +30,9 @@ BASIC_FONT_SIZE = 20
 shapes_to_render = []
 buttons_to_render = []
 
+MOVE_SPEED = 5
+SCALE_SPEED = 5
+
 
 def main():
     global main_screen, image_screen, selected_colour, shapes_to_render
@@ -75,12 +78,6 @@ def set_shapes():
     square_head = Rectangle((SCREEN_CENTRE[0], SCREEN_CENTRE[1] - 50), WHITE, pygame.Rect(0, 0, 50, 50))
     shapes_to_render.append(square_head)
 
-    triangle = Polygon((0, 0), RED, [(SCREEN_CENTRE[0] - 50, SCREEN_CENTRE[1] - 75),
-                                     (SCREEN_CENTRE[0], SCREEN_CENTRE[1] - 125),
-                                     (SCREEN_CENTRE[0] + 50, SCREEN_CENTRE[1] - 75)])
-
-    shapes_to_render.append(triangle)
-
 
 def set_buttons(font):
     save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, (75, 100))
@@ -89,8 +86,17 @@ def set_buttons(font):
     delete_button = generate_text(font, "Delete", FONT_COLOUR, BUTTON_COLOUR, (75, 125))
     buttons_to_render.append((delete_button[0], delete_button[1], "DELETE"))
 
-    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 150))
+    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 175))
     buttons_to_render.append((circle_button[0], circle_button[1], "CIRCLE"))
+
+    square_button = generate_text(font, "Square", FONT_COLOUR, BUTTON_COLOUR, (75, 200))
+    buttons_to_render.append((square_button[0], square_button[1], "SQUARE"))
+
+    increase_size = generate_text(font, "Increase", FONT_COLOUR, BUTTON_COLOUR, (75, 250))
+    buttons_to_render.append((increase_size[0], increase_size[1], "INCREASE"))
+
+    decrease_size = generate_text(font, "Decrease", FONT_COLOUR, BUTTON_COLOUR, (75, 275))
+    buttons_to_render.append((decrease_size[0], decrease_size[1], "DECREASE"))
 
 
 def draw_shapes(shapes):
@@ -156,7 +162,10 @@ def get_random_colour():
 
 
 def generate_text(font, text, colour, bg_colour, centre_point):
-    """Returns the Rect and Surface of a text """
+    """
+    Returns the Rect and Surface of a text
+    Source: http://inventwithpython.com/makinggames.pdf
+    """
     text_display = font.render(text, True, colour, bg_colour)
 
     text_rect = text_display.get_rect()
@@ -190,19 +199,19 @@ def move_current_shape(shapes=[]):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     shape_pos = shapes[len(shapes) - 1].position
-                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] - 5
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] - MOVE_SPEED
 
                 elif event.key == pygame.K_s:
                     shape_pos = shapes[len(shapes) - 1].position
-                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] + 5
+                    shapes[len(shapes) - 1].position = shape_pos[0], shape_pos[1] + MOVE_SPEED
 
                 elif event.key == pygame.K_a:
                     shape_pos = shapes[len(shapes) - 1].position
-                    shapes[len(shapes) - 1].position = shape_pos[0] - 5, shape_pos[1]
+                    shapes[len(shapes) - 1].position = shape_pos[0] - MOVE_SPEED, shape_pos[1]
 
                 elif event.key == pygame.K_d:
                     shape_pos = shapes[len(shapes) - 1].position
-                    shapes[len(shapes) - 1].position = shape_pos[0] + 5, shape_pos[1]
+                    shapes[len(shapes) - 1].position = shape_pos[0] + MOVE_SPEED, shape_pos[1]
 
             pygame.event.post(event)
 
@@ -224,6 +233,12 @@ def trigger_button_events(event=""):
     elif event == "SQUARE":
         square = Rectangle(SCREEN_CENTRE, selected_colour, pygame.Rect(0, 0, 50, 50))
         shapes_to_render.append(square)
+
+    elif event == "INCREASE":
+        shapes_to_render[len(shapes_to_render) - 1].set_size(SCALE_SPEED)
+
+    elif event == "DECREASE":
+        shapes_to_render[len(shapes_to_render) - 1].set_size(-SCALE_SPEED)
 
 
 def check_for_quit():
@@ -255,6 +270,13 @@ class Shape:
         """
         pass
 
+    def set_size(self, size=0):
+        """
+        A separate function that is being declared so that the child classes
+        may use it in their own individual way, but with the same result
+        """
+        pass
+
 
 class Rectangle(Shape):
     """
@@ -268,12 +290,17 @@ class Rectangle(Shape):
         """
         super(Rectangle, self).__init__(position, colour)
 
-        bounds.center = (position[0], position[1])
+        bounds.center = position
         self.bounds = bounds
 
     def draw_shape(self):
         super(Rectangle, self).draw_shape()
+        self.bounds.center = self.position
         pygame.draw.rect(image_screen, self.colour, self.bounds)
+
+    def set_size(self, size=0):
+        super(Rectangle, self).set_size(size)
+        self.bounds = pygame.Rect(self.bounds[0], self.bounds[1], self.bounds[2] + size, self.bounds[3] + size)
 
 
 class Circle(Shape):
@@ -284,6 +311,10 @@ class Circle(Shape):
     def draw_shape(self):
         super(Circle, self).draw_shape()
         pygame.draw.circle(image_screen, self.colour, (int(self.position[0]), int(self.position[1])), self.radius)
+
+    def set_size(self, size=0):
+        super(Circle, self).set_size(size)
+        self.radius += size
 
 
 class Polygon(Shape):
