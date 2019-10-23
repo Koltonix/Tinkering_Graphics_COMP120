@@ -42,17 +42,20 @@ buttons_to_render = []
 MOVE_SPEED = 5
 SCALE_SPEED = 5
 
+is_colour_button_selected = False
+main_screen = pygame.Surface
+image_screen = pygame.Surface
+selected_colour = (0, 0, 255)
+
 
 def main():
     """
     The primary function which includes the
     initialisation and game loop of the tool itself.
     """
-    global main_screen, image_screen, selected_colour, shapes_to_render
-
+    global main_screen, image_screen, shapes_to_render, is_colour_button_selected
     pygame.init()
 
-    selected_colour = WHITE
     basic_font = pygame.font.Font("freesansbold.ttf", BASIC_FONT_SIZE)
 
     main_screen = (pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)))
@@ -73,7 +76,6 @@ def main():
         draw_buttons(buttons_to_render)
 
         if get_input():
-            # image = pygame.image.load(str(os.getcwd()) + "\\Images\\" + "Cactus.png")
             cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
             save_image(cropped_surface, "saved_image.png", os.getcwd())
 
@@ -112,6 +114,15 @@ def set_buttons(font):
 
     decrease_size = generate_text(font, "Decrease", FONT_COLOUR, BUTTON_COLOUR, (75, 275))
     buttons_to_render.append((decrease_size[0], decrease_size[1], "DECREASE"))
+
+    r_colour_button = generate_text(font, " " + str(selected_colour[0]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 100))
+    buttons_to_render.append((r_colour_button[0], r_colour_button[1], "RED"))
+
+    g_colour_button = generate_text(font, " " + str(selected_colour[1]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 125))
+    buttons_to_render.append((g_colour_button[0], g_colour_button[1], "GREEN"))
+
+    b_colour_button = generate_text(font, " " + str(selected_colour[2]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 150))
+    buttons_to_render.append((b_colour_button[0], b_colour_button[1], "BLUE"))
 
 
 def draw_shapes(shapes):
@@ -162,7 +173,7 @@ def crop_image(image, background_colour=(0, 0, 0)):
                     smallest_used_coordinate = (smallest_used_coordinate[0], y)
                     continue
 
-    # Giving the cropped surface the lowest position point of the imageand the highest
+    # Giving the cropped surface the lowest position point of the image and the highest
     surface_size = ((largest_used_coordinate[0] - smallest_used_coordinate[0]),
                     (largest_used_coordinate[1] - smallest_used_coordinate[1]))
 
@@ -211,6 +222,11 @@ def check_button_press(buttons=[]):
             for i in range(0, len(buttons)):
                 if buttons[i][1].collidepoint(pygame.mouse.get_pos()):
                     trigger_button_events(buttons[i][2])
+                    continue
+
+                elif i == len(buttons) - 1:
+                    global is_colour_button_selected
+                    is_colour_button_selected = False
 
 
 def move_current_shape(shapes=[]):
@@ -253,7 +269,7 @@ def trigger_button_events(event=""):
             shapes_to_render.remove(shape_to_delete)
 
     elif event == "CIRCLE":
-        circle = Circle(SCREEN_CENTRE, GREEN, 30)
+        circle = Circle(SCREEN_CENTRE, selected_colour, 30)
         shapes_to_render.append(circle)
 
     elif event == "SQUARE":
@@ -265,6 +281,10 @@ def trigger_button_events(event=""):
 
     elif event == "DECREASE":
         shapes_to_render[len(shapes_to_render) - 1].set_size(-SCALE_SPEED)
+
+    elif event == "RED" or event == "GREEN" or event == "BLUE":
+        global is_colour_button_selected
+        is_colour_button_selected = True
 
 
 def check_for_quit():
