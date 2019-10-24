@@ -28,7 +28,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 FONT_COLOUR = BLACK
-BASIC_FONT_SIZE = 15
+FONT_SIZE = 15
 
 # Basic setup for the screen display
 screen_display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -129,7 +129,7 @@ def display_image():
 
 def display_text():
     """Displays text explaining what each image is"""
-    basic_font = pygame.font.Font("freesansbold.ttf", BASIC_FONT_SIZE)
+    basic_font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
     text_red_image = basic_font.render('Eyesight with reduced Red sensitivity ', True, BLACK, WHITE)
     text_green_image = basic_font.render('Eyesight with reduced Green sensitivity ', True, BLACK, WHITE)
     text_blue_image = basic_font.render('Eyesight with reduced Blue sensitivity ', True, BLACK, WHITE)
