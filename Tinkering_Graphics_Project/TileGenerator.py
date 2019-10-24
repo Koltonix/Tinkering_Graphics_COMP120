@@ -1,10 +1,16 @@
+import sys
+import pygame
+
 """
+This program presents the user with a blank white tile.
+The user can change the appearance of the tile using the qwert keys.
+The will change the appearance of the tile to colours representing grass, dirt, water, etc... 
 
 Pair Programmed with Christopher Robertson
 """
 
-import sys
-import pygame
+__author__ = "James Mead Heath"
+__copyright__ = "MIT License Copyright (c) 2019"
 
 PROGRAM_CAPTION = "Tile Generator"
 FPS_CLOCK = pygame.time.Clock()
@@ -28,6 +34,7 @@ tile_colour = 255, 255, 255
 new_tile_colour = (0, 0, 0)
 
 
+# Creates a game loop that will constantly update itself dependant on user input
 def main():
     global new_tile_colour
     pygame.init()
