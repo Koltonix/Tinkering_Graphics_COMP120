@@ -16,20 +16,17 @@ the newly adjusted images are saved into and can be viewed within the "Colour Bl
 # Initialising Pygame
 pygame.init()
 
-
 # Basic setup for constants
 VALUE = 0.65
 
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 
-
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 FONT_COLOUR = BLACK
 BASIC_FONT_SIZE = 15
-
 
 # Basic setup for the screen display
 screen_display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
