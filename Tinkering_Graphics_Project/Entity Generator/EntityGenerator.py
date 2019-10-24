@@ -44,7 +44,7 @@ SCALE_SPEED = 5
 
 main_screen = pygame.Surface
 image_screen = pygame.Surface
-selected_colour = (0, 0, 255)
+selected_colour = (0, 0, 0)
 player_colour_input = []
 
 selected_colour_button = False, "NONE"
@@ -331,6 +331,7 @@ def set_selected_colour_button(is_true=True, colour="BLACK"):
 
 
 def reset_player_colour_input():
+    """Resets the player_colour_input colour tuple"""
     global player_colour_input
     if len(player_colour_input) > 0:
         for i in range(len(player_colour_input)):
