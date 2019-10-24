@@ -2,8 +2,10 @@ import pygame
 import os
 import sys
 
-author = "Thomas O'Leary"
-copyright_license = "MIT License Copyright (c) 2019"
+__author__ = "Thomas O'Leary"
+__copyright__ = "MIT License Copyright (c) 2019"
+__license__ = "MIT"
+__url__ = "https://github.com/Koltonix/comp120-tinkering-graphics"
 
 """
 This program is designed to take an image,
