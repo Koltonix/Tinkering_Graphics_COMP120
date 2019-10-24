@@ -10,37 +10,44 @@ PROGRAM_CAPTION = "Tile Generator"
 FPS_CLOCK = pygame.time.Clock()
 FPS = 30
 
+# Defining the Main Window size and Colour
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 960
 WINDOW_COLOUR = 0, 0, 0
 
+# Defining the size of the surface which the tile is drawn on
+SURFACE_WIDTH = 300
+SURFACE_HEIGHT = 300
+
+# Defining the size and default colour for the tile when the program is loaded
 TILE_HEIGHT = 200
 TILE_WIDTH = 200
 tile_colour = 255, 255, 255
 
-current_colour_overlay = (0, 0, 0)
+# Needed to hold the value of the new colour of the tile
+new_tile_colour = (0, 0, 0)
 
 
 def main():
-    global current_colour_overlay
+    global new_tile_colour
     pygame.init()
 
     main_window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    new_surface = pygame.Surface((480, 720))
+    new_surface = pygame.Surface((SURFACE_WIDTH, SURFACE_HEIGHT))
 
     is_running = True
 
     while is_running:
-        print(current_colour_overlay)
+        print(new_tile_colour)
         check_for_quit()
         main_window.fill(WINDOW_COLOUR)
 
         draw_tile(new_surface)
 
         check_for_input(new_surface)
-        print(current_colour_overlay)
-        if current_colour_overlay is not None:
-            set_image_pixels(new_surface, current_colour_overlay)
+        print(new_tile_colour)
+        if new_tile_colour is not None:
+            set_image_pixels(new_surface, new_tile_colour)
 
         main_window.blit(new_surface, (0, 0))
 
@@ -50,22 +57,37 @@ def main():
 
 # Defines Space for Tile Generation
 def draw_tile(new_surface):
-    pygame.draw.rect(new_surface, tile_colour, (480 * .5, 720 * .5, TILE_HEIGHT, TILE_WIDTH))
+    pygame.draw.rect(new_surface, tile_colour, (SURFACE_WIDTH * .5, SURFACE_WIDTH * .5, TILE_HEIGHT, TILE_WIDTH))
 
 
-# Checks for User Input for which Tile to Generate. Struggling to get it to output.
+# Checks for User Input for which Tile to Generate.
 def check_for_input(image=pygame.Surface):
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            global current_colour_overlay
+            global new_tile_colour
 
+            # Pressing q will result in a green grass tile being generated
             if event.key == pygame.K_q:
-                current_colour_overlay = (255, 255, 255)
+                new_tile_colour = (255, 1, 255)
 
+            # Pressing w will result in a blue water tile being generated
             elif event.key == pygame.K_w:
-                current_colour_overlay = (55, 55, 55)
+                new_tile_colour = (255, 255, 1)
+
+            # Pressing r will result in a brown dirt tile being generated
+            elif event.key == pygame.K_r:
+                new_tile_colour = (125, 196, 235)
+
+            # Pressing e will result in a light blue sky tile being generated
+            elif event.key == pygame.K_e:
+                new_tile_colour = (255, 100, 25)
+
+            # Pressing t will result in the default white tile being generated
+            elif event.key == pygame.K_t:
+                new_tile_colour = (0, 0, 0)
 
 
+# Needed to change the pixel colours within the tile, gets the range of pixels on the surface
 def set_image_pixels(image=pygame.Surface, colour=(0, 0, 0)):
     for x in range(image.get_width()):
         for y in range(image.get_height()):
@@ -78,6 +100,7 @@ def set_image_pixels(image=pygame.Surface, colour=(0, 0, 0)):
             image.set_at((x, y), adjusted_pixel_colour)
 
 
+# Needed to check if the user is trying to quit the program
 def check_for_quit():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -86,6 +109,7 @@ def check_for_quit():
             pygame.event.post(event)
 
 
+# Needed so that the program will quit when the user chooses to
 def quit_program():
     pygame.quit()
     sys.exit()
