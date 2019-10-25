@@ -42,6 +42,18 @@ buttons_to_render = []
 MOVE_SPEED = 5
 SCALE_SPEED = 5
 
+SAVE_BUTTON_POSITION = (75, 100)
+DELETE_BUTTON_POSITION = (75, 125)
+CIRCLE_BUTTON_POSITION = (75, 175)
+SQUARE_BUTTON_POSITION = (75, 200)
+INCREASE_BUTTON_POSITION = (75, 250)
+DECREASE_BUTTON_POSITION = (75, 275)
+R_BUTTON_POSITION = (565, 100)
+G_BUTTON_POSITION = (565, 125)
+B_BUTTON_POSITION = (565, 150)
+
+DEFAULT_SQUARE_RECT = pygame.Rect(0, 0, 50, 50)
+
 main_screen = pygame.Surface
 image_screen = pygame.Surface
 selected_colour = (0, 0, 0)
@@ -108,31 +120,37 @@ def set_buttons(font):
     :arg
         font: The basic font of the pygame project
     """
-    save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, (75, 100))
+    save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, SAVE_BUTTON_POSITION)
     buttons_to_render.append((save_button[0], save_button[1], "SAVE"))
 
-    delete_button = generate_text(font, "Delete", FONT_COLOUR, BUTTON_COLOUR, (75, 125))
+    delete_button = generate_text(font, "Delete", FONT_COLOUR, BUTTON_COLOUR, DELETE_BUTTON_POSITION)
     buttons_to_render.append((delete_button[0], delete_button[1], "DELETE"))
 
-    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, (75, 175))
+    circle_button = generate_text(font, "Circle", FONT_COLOUR, BUTTON_COLOUR, CIRCLE_BUTTON_POSITION)
     buttons_to_render.append((circle_button[0], circle_button[1], "CIRCLE"))
 
-    square_button = generate_text(font, "Square", FONT_COLOUR, BUTTON_COLOUR, (75, 200))
+    square_button = generate_text(font, "Square", FONT_COLOUR, BUTTON_COLOUR, SQUARE_BUTTON_POSITION)
     buttons_to_render.append((square_button[0], square_button[1], "SQUARE"))
 
-    increase_size = generate_text(font, "Increase", FONT_COLOUR, BUTTON_COLOUR, (75, 250))
+    increase_size = generate_text(font, "Increase", FONT_COLOUR, BUTTON_COLOUR, INCREASE_BUTTON_POSITION)
     buttons_to_render.append((increase_size[0], increase_size[1], "INCREASE"))
 
-    decrease_size = generate_text(font, "Decrease", FONT_COLOUR, BUTTON_COLOUR, (75, 275))
+    decrease_size = generate_text(font, "Decrease", FONT_COLOUR, BUTTON_COLOUR, DECREASE_BUTTON_POSITION)
     buttons_to_render.append((decrease_size[0], decrease_size[1], "DECREASE"))
 
-    r_colour_button = generate_text(font, " " + str(selected_colour[0]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 100))
+    r_colour_button = generate_text(font, " " + str(selected_colour[0]) + " ",
+                                    FONT_COLOUR, BUTTON_COLOUR, R_BUTTON_POSITION)
+
     buttons_to_render.append((r_colour_button[0], r_colour_button[1], "RED"))
 
-    g_colour_button = generate_text(font, " " + str(selected_colour[1]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 125))
+    g_colour_button = generate_text(font, " " + str(selected_colour[1]) + " ",
+                                    FONT_COLOUR, BUTTON_COLOUR, G_BUTTON_POSITION)
+
     buttons_to_render.append((g_colour_button[0], g_colour_button[1], "GREEN"))
 
-    b_colour_button = generate_text(font, " " + str(selected_colour[2]) + " ", FONT_COLOUR, BUTTON_COLOUR, (565, 150))
+    b_colour_button = generate_text(font, " " + str(selected_colour[2]) + " ",
+                                    FONT_COLOUR, BUTTON_COLOUR, B_BUTTON_POSITION)
+
     buttons_to_render.append((b_colour_button[0], b_colour_button[1], "BLUE"))
 
 
@@ -372,7 +390,7 @@ def trigger_button_events(event=""):
         shapes_to_render.append(circle)
 
     elif event == "SQUARE":
-        square = Rectangle(SCREEN_CENTRE, selected_colour, pygame.Rect(0, 0, 50, 50))
+        square = Rectangle(SCREEN_CENTRE, selected_colour, DEFAULT_SQUARE_RECT)
         shapes_to_render.append(square)
 
     elif event == "INCREASE":
