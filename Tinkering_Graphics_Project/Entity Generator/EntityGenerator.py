@@ -102,7 +102,12 @@ def set_shapes():
 
 
 def set_buttons(font):
-    """Creates the buttons and adds them to a list which renders them onto the surface"""
+    """
+    Creates the buttons and adds them to a list which renders them onto the surface
+
+    :arg
+        font: The basic font of the pygame project
+    """
     save_button = generate_text(font, "Save Image", FONT_COLOUR, BUTTON_COLOUR, (75, 100))
     buttons_to_render.append((save_button[0], save_button[1], "SAVE"))
 
@@ -132,14 +137,25 @@ def set_buttons(font):
 
 
 def draw_shapes(shapes):
-    """Renders the shapes to a separate display surface and then blits them to the main screen too"""
+    """
+    Renders the shapes to a separate display surface and then blits them to the main screen too
+
+    :arg
+        shapes: list of shapes classes to render
+    """
     for i in range(0, len(shapes)):
         shapes[i].draw_shape()
         main_screen.blit(image_screen, (0, 0))
 
 
 def draw_buttons(buttons=[], font=pygame.font):
-    """Renders the buttons to the main display surface"""
+    """
+    Renders the buttons to the main display surface
+
+    :arg
+        buttons: list of buttons to render every frame
+        font: default pygame font of the project
+    """
     for i in range(0, len(buttons)):
         # Unfortunately, due to how I went about the buttons I must refresh each colour one manually here
         # If I had time I would have liked to refactor it, but unfortunately I do not
@@ -166,13 +182,30 @@ def draw_buttons(buttons=[], font=pygame.font):
 
 
 def save_image(image, file_name="", path=os.path):
-    """Saves the image to the directory path of the project in a sub folder of Images"""
+    """
+    Saves the image to the directory path of the project in a sub folder of Images
+
+    :arg
+        image: the image surface that has been loaded from a file
+        file_name: the new name of the file to be saved
+        path: the directory to save the file
+
+    """
     pygame.image.save(image, str(path) + "\\Images\\" + file_name)
     print("Image has saved as: " + file_name)
 
 
 def crop_image(image, background_colour=(0, 0, 0)):
-    """Returns a cropped display surface"""
+    """
+    Returns a cropped display surface
+
+    :arg
+        image: the image surface that has been loaded from a file
+        background_colour: the colour to use to crop the image
+
+    :return
+        cropped_image: the image surface cropped
+    """
     # Getting the largest coordinate that it can be to scale down
     smallest_used_coordinate = image.get_size()
     largest_used_coordinate = (0, 0)
@@ -210,7 +243,13 @@ def crop_image(image, background_colour=(0, 0, 0)):
 
 
 def get_random_colour():
-    """Returns a random colour from the entire colour spectrum"""
+    """
+    Returns a random colour from the entire colour spectrum
+
+    :return
+        colour: a tuple that represents an RGB value
+
+    """
     colour = [0, 0, 0]
     for i in range(0, 2):
         colour[i] = random.randint(0, 255)
@@ -222,6 +261,17 @@ def generate_text(font, text, colour, bg_colour, centre_point):
     """
     Returns the Rect and Surface of a text
     Source: http://inventwithpython.com/makinggames.pdf
+
+    :arg
+        font: the basic font of the pygame project
+        text: the string text that will be displayed
+        colour: a tuple of an RGB value
+        bg_colour: the background colour to apply to the button
+        centre_point: the point at which the rect will be centred at
+
+    :return
+        text_display: the pygame.surface of the button
+        text_rect: the pygame.rect of the button
     """
     text_display = font.render(text, True, colour, bg_colour)
 
@@ -232,7 +282,12 @@ def generate_text(font, text, colour, bg_colour, centre_point):
 
 
 def get_input():
-    """Returns a boolean to state if any button has been pressed"""
+    """
+    Returns a boolean to state if any button has been pressed
+
+    :return
+        Returns a boolean based on pressing the letter 'p'
+    """
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
@@ -243,7 +298,12 @@ def get_input():
 
 
 def check_button_press(buttons=[]):
-    """Checks for an onscreen button press which invokes an event"""
+    """
+    Checks for an onscreen button press which invokes an event
+
+    :arg
+        buttons: takes in the button list of surfaces and rects
+    """
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             for i in range(0, len(buttons)):
@@ -259,7 +319,12 @@ def check_button_press(buttons=[]):
 
 
 def move_current_shape(shapes=[]):
-    """Moves the last object in the array depending on the player input of WASD"""
+    """
+    Moves the last object in the array depending on the player input of WASD
+
+    :arg
+        shapes: a list of shape classes
+    """
     if len(shapes) > 0:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -287,7 +352,12 @@ def move_current_shape(shapes=[]):
 
 
 def trigger_button_events(event=""):
-    """Invokes the functions depending on the event type"""
+    """
+    Invokes the functions depending on the event type
+
+    :arg
+        event: a string of an event that can be invoked
+    """
     if event == "SAVE":
         cropped_surface = crop_image(image_screen, BACKGROUND_COLOUR)
         save_image(cropped_surface, "saved_image.png", os.getcwd())
@@ -322,7 +392,13 @@ def trigger_button_events(event=""):
 
 
 def set_selected_colour_button(is_true=True, colour="BLACK"):
-    """Used to access the selected_colour_button variable using multiple values"""
+    """
+    Used to access the selected_colour_button variable using multiple values
+
+    :arg
+        is_true: a boolean used to pass a value to the global variable
+        colour: a tuple used to store an RGB colour value
+    """
 
     reset_player_colour_input()
 
@@ -343,6 +419,9 @@ def set_colour(rgb_name):
     A function to set either the R, G, or B value of the next shape
     ASCII Conversion: https://stackoverflow.com/questions/3673428/convert-int-to-ascii-and-back-in-python
     Checking int against string type: https://tdhopper.com/blog/testing-whether-a-python-string-contains-an-integer/
+
+    :arg
+        rgb_name: a string for the name of the colour. Either RED, GREEN, or BLUE
     """
 
     for event in pygame.event.get():
@@ -368,7 +447,13 @@ def set_colour(rgb_name):
 
 
 def assign_colour(rgb_name, colour_value):
-    """"Uses a colour name and the value to assign to the current selected colour of the player"""
+    """"
+    Uses a colour name and the value to assign to the current selected colour of the player
+
+    :arg
+        rgb_name: a string for the name of the colour. Either RED, GREEN, or BLUE
+        colour_value: a tuple that stores an RGV value
+    """
     global selected_colour
     if rgb_name == "RED":
         selected_colour = colour_value, selected_colour[1], selected_colour[2]
@@ -403,7 +488,13 @@ class Shape:
     signatures for the child classes to use and adapt
     """
     def __init__(self, position=(0, 0), colour=(0, 0, 0)):
-        """ A constructor for Shape that assigns required parameters """
+        """
+        A constructor for Shape that assigns required parameters
+
+        :arg
+            position: a tuple that takes in a position to set the render point of the object
+            colour: a tuple that stores and RGB value
+        """
         self.position = position
         self.colour = colour
 
@@ -418,6 +509,9 @@ class Shape:
         """
         A separate function that is being declared so that the child classes
         may use it in their own individual way, but with the same result
+
+        :arg
+            size: an int that can be changed to change the size increase/decrease
         """
         pass
 
@@ -431,6 +525,11 @@ class Rectangle(Shape):
         """
         The constructor of the Rectangle which takes in a pygame.Rect() parameter to be
         used when creating a rectangle. It also runs the parent Shape class constructor too
+
+        :arg
+            position: a tuple that takes in a position set the centre point of the rect
+            colour: a tuple that stores and RGB value
+            bounds: sets the scale of the square as well as the default position
         """
         super(Rectangle, self).__init__(position, colour)
 
@@ -444,7 +543,12 @@ class Rectangle(Shape):
         pygame.draw.rect(image_screen, self.colour, self.bounds)
 
     def set_size(self, size=0):
-        """The overridden function of Shape.set_size which uses bounds to set its size"""
+        """
+        The overridden function of Shape.set_size which uses bounds to set its size
+
+        :arg
+            size: an int that can be changed to change the size increase/decrease
+        """
         super(Rectangle, self).set_size(size)
         self.bounds = pygame.Rect(self.bounds[0], self.bounds[1], self.bounds[2] + size, self.bounds[3] + size)
 
@@ -452,6 +556,16 @@ class Rectangle(Shape):
 class Circle(Shape):
     """A child class to Shape which stores a radius to be drawn"""
     def __init__(self, position=(0, 0), colour=(0, 0, 0), radius=0):
+        """
+                The constructor of the Circle which takes an extra parameter of
+                radius to be used in the scale of the circle
+
+                :arg
+                    position: a tuple that takes in a position set the centre point of the rect
+                    colour: a tuple that stores and RGB value
+                    radius: an int that stores the size of the circle
+        """
+
         super(Circle, self).__init__(position, colour)
         self.radius = radius
 
@@ -461,7 +575,12 @@ class Circle(Shape):
         pygame.draw.circle(image_screen, self.colour, (int(self.position[0]), int(self.position[1])), self.radius)
 
     def set_size(self, size=0):
-        """The overridden function of Shape.set_Size which just affects its radius to set its size"""
+        """
+        The overridden function of Shape.set_Size which just affects its radius to set its size
+
+        :arg
+            size: an int that can be changed to change the size increase/decrease
+        """
         super(Circle, self).set_size(size)
         self.radius += size
 
@@ -469,7 +588,14 @@ class Circle(Shape):
 class Polygon(Shape):
     """Child class of Shape which stores a list of positions bounds to be drawn"""
     def __init__(self, position=(0, 0), colour=(0, 0, 0), bounds=[]):
-        """Constructor of the Polygon class which takes in an additional bounds list of positions"""
+        """
+        Constructor of the Polygon class which takes in an additional bounds list of positions
+
+        :arg
+                    position: a tuple that takes in a position set the centre point of the rect
+                    colour: a tuple that stores and RGB value
+                    bounds: a list of tuples that have two values that act as a position
+        """
         super(Polygon, self).__init__(position, colour)
         self.bounds = bounds
 
